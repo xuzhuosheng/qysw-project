@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qysw.qyswproviderxtgn.dao.QysswjXxzxTXtUserDao">
+
+    <resultMap type="com.qysw.qyswproviderxtgn.entity.QysswjXxzxTXtUser" id="QysswjXxzxTXtUserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="cellphone" column="cellphone" jdbcType="VARCHAR"/>
+        <result property="truename" column="truename" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createtime" jdbcType="OTHER"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="zt" column="zt" jdbcType="VARCHAR"/>
+        <result property="bz" column="bz" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--查询所有用户-->
+    <select id="queryAllUser" resultMap="QysswjXxzxTXtUserMap">
+        select
+        id, username, password, cellphone, truename, createtime, creator, zt, bz
+        from qysw.qysswj_xxzx_t_xt_user
+        where zt='1'
+        <if test="searchContent!=null and searchContent!=''">
+            and
+            (
+            username like concat(concat('%',#{searchContent}),'%')
+            or password like concat(concat('%',#{searchContent}),'%')
+            or cellphone like concat(concat('%',#{searchContent}),'%')
+            or truename like concat(concat('%',#{searchContent}),'%')
+            )
+        </if>
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="QysswjXxzxTXtUserMap">
+        select
+          id, username, password, cellphone, truename, createtime, creator, zt, bz
+        from qysw.qysswj_xxzx_t_xt_user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="QysswjXxzxTXtUserMap">
+        select
+          id, username, password, cellphone, truename, createtime, creator, zt, bz
+        from qysw.qysswj_xxzx_t_xt_user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="QysswjXxzxTXtUserMap">
+        select
+        id, username, password, cellphone, truename, createtime, creator, zt, bz
+        from qysw.qysswj_xxzx_t_xt_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="cellphone != null and cellphone != ''">
+                and cellphone = #{cellphone}
+            </if>
+            <if test="truename != null and truename != ''">
+                and truename = #{truename}
+            </if>
+            <if test="createtime != null">
+                and createtime = #{createtime}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="zt != null and zt != ''">
+                and zt = #{zt}
+            </if>
+            <if test="bz != null and bz != ''">
+                and bz = #{bz}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into qysw.qysswj_xxzx_t_xt_user(username, password, cellphone, truename, createtime, creator, zt)
+        values (#{qysswjXxzxTXtUser.username}, #{qysswjXxzxTXtUser.password}, #{qysswjXxzxTXtUser.cellphone}, #{qysswjXxzxTXtUser.truename}, now(), 'admin', '1')
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update qysw.qysswj_xxzx_t_xt_user
+        <set>
+            <if test="qysswjXxzxTXtUser.username != null and qysswjXxzxTXtUser.username != ''">
+                username = #{qysswjXxzxTXtUser.username},
+            </if>
+            <if test="qysswjXxzxTXtUser.password != null and qysswjXxzxTXtUser.password != ''">
+                password = #{qysswjXxzxTXtUser.password},
+            </if>
+            <if test="qysswjXxzxTXtUser.cellphone != null and qysswjXxzxTXtUser.cellphone != ''">
+                cellphone = #{qysswjXxzxTXtUser.cellphone},
+            </if>
+            <if test="qysswjXxzxTXtUser.truename != null and qysswjXxzxTXtUser.truename != ''">
+                truename = #{qysswjXxzxTXtUser.truename},
+            </if>
+            <!--<if test="createtime != null">-->
+            <!--createtime = #{createtime},-->
+            <!--</if>-->
+            <!--<if test="creator != null and creator != ''">-->
+            <!--creator = #{creator},-->
+            <!--</if>-->
+            <!--<if test="zt != null and zt != ''">-->
+            <!--zt = #{zt},-->
+            <!--</if>-->
+            <!--<if test="bz != null and bz != ''">-->
+            <!--bz = #{bz},-->
+            <!--</if>-->
+        </set>
+        where id = #{qysswjXxzxTXtUser.id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from qysw.qysswj_xxzx_t_xt_user where id in
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
